@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+</head>
+<body>
+    <h1>Blog-Übersicht</h1>
+    <p>Hier findest du alle Blogartikel.</p>
+    <ul id="blog-list"></ul>
+
+    <script>
+        fetch("list.json")
+            .then(response => response.json())
+            .then(data => {
+                let list = document.getElementById("blog-list");
+                data.posts.forEach(post => {
+                    let li = document.createElement("li");
+                    let a = document.createElement("a");
+                    a.href = post.link;
+                    a.textContent = post.title;
+                    li.appendChild(a);
+                    list.appendChild(li);
+                });
+            })
+            .catch(error => console.error("Fehler beim Laden der Blogliste:", error));
+    </script>
+</body>
+</html>
