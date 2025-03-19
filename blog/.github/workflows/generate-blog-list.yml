@@ -1,0 +1,26 @@
+name: Update Blog List
+
+on:
+  push:
+    paths:
+      - 'blog/*.html'
+  workflow_dispatch:
+
+jobs:
+  update-list:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate posts.json
+        run: |
+          ls blog/*.html | sed 's|blog/||' | jq -R -s -c 'split("\n")[:-1]' > blog/posts.json
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add blog/posts.json
+          git commit -m "Automatische Aktualisierung der Blogliste"
+          git push
